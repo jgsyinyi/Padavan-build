@@ -34,17 +34,17 @@ jobs:
       run: |
         git clone --depth=1 https://github.com/bkye/rt-n56u.git /opt/rt-n56u
         cd /opt/rt-n56u/toolchain-mipsel
-        touch dl_toolchain.sh
-        cat > dl_toolchain.sh <<EOF
-        #!/bin/sh
-        DIR="toolchain-3.4.x"
-        DL_NAME="mipsel-linux-uclibc.tar.xz"
-        DL_URL="https://github.com/hanwckf/padavan-toolchain/releases/download/v1.1/\$DL_NAME"
-        curl -O -L \$DL_URL && \
-        mkdir -p \$DIR && \
-        tar -xvf \$DL_NAME -C \$DIR
-        EOF
-        
+        echo '#!/bin/sh' >> dl_toolchain.sh
+        echo 'DIR="toolchain-3.4.x"' >> dl_toolchain.sh
+        echo 'DL_NAME="mipsel-linux-uclibc.tar.xz"' >> dl_toolchain.sh
+        echo 'DL_URL="https://github.com/hanwckf/padavan-toolchain/releases/download/v1.1/$DL_NAME"' >> dl_toolchain.sh
+        echo 'if [ -d $DIR ]; then' >> dl_toolchain.sh
+        echo '	echo "$DIR exists!"' >> dl_toolchain.sh
+        echo '	exit' >> dl_toolchain.sh
+        echo 'fi' >> dl_toolchain.sh
+        echo 'curl -O -L $DL_URL && \' >> dl_toolchain.sh
+        echo 'mkdir -p $DIR && \' >> dl_toolchain.sh
+        echo 'tar -xvf $DL_NAME -C $DIR' >> dl_toolchain.sh
         sh dl_toolchain.sh
         mkdir -p /opt/images/
     - name: Build Firmware
